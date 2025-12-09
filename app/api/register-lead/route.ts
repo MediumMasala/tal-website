@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LeadPayload, AISummary } from "@/lib/companyConfig";
+import { saveLead, Lead } from "@/lib/supabase";
 
 type RegisterLeadRequest = LeadPayload;
 
@@ -118,24 +119,32 @@ export async function POST(
       console.log("AI Summary:", aiSummary);
     }
 
-    console.log("=============================");
+    // Prepare lead data for database
+    const leadData: Lead = {
+      company_slug: companySlug,
+      company_name: companyName,
+      whatsapp_number: whatsAppNumber,
+      user_name: userName,
+      user_workplace: userWorkplace,
+      basic_ask: basicAsk,
+      page_url: pageUrl,
+      utm_raw: utm.raw,
+      ai_title: aiSummary?.title,
+      ai_tags: aiSummary?.tags,
+    };
 
-    // TODO: Add database integration here (Prisma, Supabase, etc.)
-    // Example:
-    // await prisma.lead.create({
-    //   data: {
-    //     companySlug,
-    //     companyName,
-    //     whatsAppNumber,
-    //     userName,
-    //     userWorkplace,
-    //     basicAsk,
-    //     pageUrl,
-    //     utmRaw: utm.raw,
-    //     aiTitle: aiSummary?.title,
-    //     aiTags: aiSummary?.tags,
-    //   },
-    // });
+    // Save to database
+    const saveResult = await saveLead(leadData);
+
+    if (!saveResult.success) {
+      console.error("Failed to save lead to database:", saveResult.error);
+      // Still return success to user - we don't want to block them
+      // The lead is logged to console as backup
+    } else {
+      console.log("Lead saved to database successfully");
+    }
+
+    console.log("=============================");
 
     return NextResponse.json({
       ok: true,
