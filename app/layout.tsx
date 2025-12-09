@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { companyConfig } from "@/lib/companyConfig";
 
 export const metadata: Metadata = {
-  title: "Tal - Your Job-Fixing Agent on WhatsApp",
-  description:
-    "One serious, relevant job a day on WhatsApp. Escape bad hikes, toxic teams, and lowball offers with Tal.",
+  title: `Tal for ${companyConfig.name} - Find Better Jobs on WhatsApp`,
+  description: `For ${companyConfig.name} employees: Tal is your job-fixing agent on WhatsApp. Get 1 serious, relevant job a day - no spam, no random HR calls.`,
   openGraph: {
-    title: "Tal - Your Job-Fixing Agent on WhatsApp",
-    description: "One serious, relevant job a day on WhatsApp. Escape bad hikes, toxic teams, and lowball offers.",
+    title: `Tal for ${companyConfig.name} - Find Better Jobs on WhatsApp`,
+    description: `For ${companyConfig.name} employees: Get 1 serious, relevant job a day on WhatsApp with Tal.`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tal - Your Job-Fixing Agent on WhatsApp",
-    description: "One serious, relevant job a day on WhatsApp. Escape bad hikes, toxic teams, and lowball offers.",
+    title: `Tal for ${companyConfig.name} - Find Better Jobs on WhatsApp`,
+    description: `For ${companyConfig.name} employees: Get 1 serious, relevant job a day on WhatsApp with Tal.`,
   },
 };
 

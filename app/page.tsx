@@ -1,156 +1,196 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import InteractivePhone from "./(components)/InteractivePhone";
-
-// Company logos configuration
-// To add logos:
-// 1. Add logo files to /public/logos/ (e.g., google.svg, microsoft.png)
-// 2. Update the 'logo' field below with the filename
-// 3. Logos will display as grayscale by default, colored on hover
-const COMPANIES = [
-  { name: "Google", logo: "/logos/google.svg" },
-  { name: "Microsoft", logo: "/logos/microsoft.svg" },
-  { name: "Amazon", logo: "/logos/amazon.svg" },
-  { name: "Flipkart", logo: "/logos/flipkart.svg" },
-  { name: "Swiggy", logo: "/logos/swiggy.svg" },
-  { name: "CRED", logo: "/logos/cred.svg" },
-  { name: "Razorpay", logo: "/logos/razorpay.svg" },
-  { name: "Zerodha", logo: "/logos/zerodha.svg" },
-  { name: "PhonePe", logo: "/logos/phonepe.svg" },
-  { name: "Atlassian", logo: "/logos/atlassian.svg" },
-];
+import ChatWidget from "./(components)/ChatWidget";
+import { companyConfig } from "@/lib/companyConfig";
 
 export default function Home() {
-  const [isComplete, setIsComplete] = useState(false);
+  const openWhatsApp = () => {
+    window.open(companyConfig.talWhatsAppLink, "_blank");
+  };
 
   return (
-    <div className="min-h-screen gradient-bg-warm overflow-x-hidden">
-      {/* Decorative blobs */}
-      <div className="blob-decoration blob-orange w-[500px] h-[500px] -top-[200px] right-[10%] fixed" />
-      <div className="blob-decoration blob-purple w-[400px] h-[400px] top-[40%] -left-[100px] fixed" />
-      <div className="blob-decoration blob-orange w-[300px] h-[300px] bottom-[10%] right-[5%] fixed" />
+    <div className="min-h-screen bg-slate-950">
+      {/* Mobile: Full chat experience */}
+      <div className="md:hidden min-h-screen flex flex-col">
+        {/* Compact mobile header */}
+        <div className="px-4 pt-6 pb-4 bg-slate-950">
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-3"
+            style={{
+              backgroundColor: `${companyConfig.primaryColor}15`,
+              color: companyConfig.primaryColor,
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: companyConfig.primaryColor }}
+            ></span>
+            {companyConfig.employeeCountText}
+          </div>
 
-      {/* Main container */}
-      <div className="relative min-h-screen flex flex-col">
-        {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-gray-100">
-          <div className="max-w-6xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg">T</span>
+          {/* Headline */}
+          <h1 className="text-xl font-bold text-white mb-2">
+            For{" "}
+            <span style={{ color: companyConfig.primaryColor }}>
+              {companyConfig.name}
+            </span>{" "}
+            employees
+          </h1>
+          <p className="text-sm text-slate-400">
+            Find better jobs on WhatsApp with Tal
+          </p>
+        </div>
+
+        {/* Chat widget - fills remaining space */}
+        <div className="flex-1 px-2 pb-2">
+          <ChatWidget />
+        </div>
+      </div>
+
+      {/* Desktop: Two-column layout */}
+      <div className="hidden md:block">
+        <div className="max-w-6xl mx-auto px-4 py-12 min-h-screen">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+            {/* Left column: Hero */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
+                style={{
+                  backgroundColor: `${companyConfig.primaryColor}15`,
+                  color: companyConfig.primaryColor,
+                }}
+              >
+                <span
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{ backgroundColor: companyConfig.primaryColor }}
+                ></span>
+                {companyConfig.employeeCountText}
               </div>
-              <span className="font-bold text-xl text-gray-900">Tal</span>
-            </div>
-            <a
-              href="mailto:hey@taljobs.in"
-              className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
-            >
-              Contact
-            </a>
-          </div>
-        </nav>
 
-        {/* Hero Section */}
-        <main className="flex-1 flex flex-col items-center justify-center px-4 pt-24 pb-8">
-          {/* Hero text */}
-          <div className="text-center mb-10 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-sm font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-              Now helping 1000+ professionals
-            </div>
-
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 mb-5">
-              Your friendly{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
-                job-fixing agent
-              </span>
-              {" "}on WhatsApp
-            </h1>
-
-            <p className="text-lg md:text-xl text-gray-500 max-w-lg mx-auto">
-              Chat with Tal below. Get 1 serious, relevant job a day — no spam, no nonsense.
-            </p>
-          </div>
-
-          {/* Interactive Phone */}
-          <div className="relative mb-8">
-            <InteractivePhone onComplete={() => setIsComplete(true)} />
-          </div>
-
-          {/* Success indicator */}
-          {isComplete && (
-            <div className="px-6 py-3 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm animate-fade-in-up flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              You&apos;re all set! Check WhatsApp for a message from Tal
-            </div>
-          )}
-        </main>
-
-        {/* Companies */}
-        <section className="py-12 px-4 border-t border-gray-100">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm text-gray-400 mb-6 uppercase tracking-wider">
-              Tal users work at
-            </p>
-            <div className="flex items-center justify-center flex-wrap gap-6 md:gap-8">
-              {COMPANIES.map((company) => (
-                <div
-                  key={company.name}
-                  className="company-logo-wrapper group relative"
-                  title={company.name}
-                >
-                  {/* Try to load logo image, fallback to text chip */}
-                  <Image
-                    src={company.logo}
-                    alt={`${company.name} logo`}
-                    width={100}
-                    height={32}
-                    className="company-logo h-6 md:h-8 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                    onError={(e) => {
-                      // Hide image on error, show fallback
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'block';
-                    }}
-                  />
-                  {/* Fallback text chip (hidden by default, shown if image fails) */}
-                  <div
-                    className="brand-chip px-4 py-2 rounded-full text-gray-500 text-sm font-medium hidden"
+              {/* Headline */}
+              <div className="space-y-4">
+                <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
+                  For{" "}
+                  <span
+                    className="inline-flex items-center gap-3"
+                    style={{ color: companyConfig.primaryColor }}
                   >
-                    {company.name}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+                    <CompanyLogo />
+                    {companyConfig.name}
+                  </span>{" "}
+                  employees: find better jobs on WhatsApp
+                </h1>
 
-        {/* Footer */}
-        <footer className="py-6 px-4 border-t border-gray-100 bg-white/50">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-            <span>© 2025 Watercooler Chat Pvt. Ltd.</span>
-            <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>
-              <a href="#" className="hover:text-gray-900 transition-colors">Terms</a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-900 transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-900 transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </a>
+                <p className="text-lg text-slate-400 max-w-lg">
+                  Tal is a job-fixing agent on WhatsApp. Get 1 serious, relevant
+                  job a day - no spam, no random HR calls.
+                </p>
+              </div>
+
+              {/* CTA Button */}
+              <div className="space-y-3">
+                <button
+                  onClick={openWhatsApp}
+                  className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg"
+                  style={{
+                    backgroundColor: companyConfig.primaryColor,
+                    boxShadow: `0 4px 24px ${companyConfig.primaryColor}40`,
+                  }}
+                >
+                  Chat with Tal on WhatsApp
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                </button>
+
+                <p className="text-sm text-slate-500">
+                  Opens a WhatsApp chat with Tal - your personal job agent
+                </p>
+              </div>
+
+              {/* Social proof */}
+              <div className="pt-4 space-y-3">
+                <p className="text-sm text-slate-500">
+                  Built for {companyConfig.name} employees in{" "}
+                  {companyConfig.marketLabel}.
+                </p>
+                <div className="flex items-center gap-4 text-sm text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      className="w-4 h-4 text-green-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    1 serious job a day
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      className="w-4 h-4 text-green-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    No spam
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      className="w-4 h-4 text-green-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Free to try
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column: Chat widget */}
+            <div className="h-[600px] lg:h-[650px]">
+              <ChatWidget />
             </div>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
+  );
+}
+
+function CompanyLogo() {
+  return (
+    <Image
+      src={companyConfig.logoUrl}
+      alt={`${companyConfig.name} logo`}
+      width={40}
+      height={40}
+      className="inline-block"
+      onError={(e) => {
+        // Hide if logo fails to load
+        (e.target as HTMLImageElement).style.display = "none";
+      }}
+    />
   );
 }
