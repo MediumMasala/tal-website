@@ -1,11 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import InteractivePhone from "./(components)/InteractivePhone";
 
+// Company logos configuration
+// To add logos:
+// 1. Add logo files to /public/logos/ (e.g., google.svg, microsoft.png)
+// 2. Update the 'logo' field below with the filename
+// 3. Logos will display as grayscale by default, colored on hover
 const COMPANIES = [
-  "Google", "Microsoft", "Amazon", "Flipkart", "Swiggy",
-  "CRED", "Razorpay", "Zerodha", "PhonePe", "Atlassian",
+  { name: "Google", logo: "/logos/google.svg" },
+  { name: "Microsoft", logo: "/logos/microsoft.svg" },
+  { name: "Amazon", logo: "/logos/amazon.svg" },
+  { name: "Flipkart", logo: "/logos/flipkart.svg" },
+  { name: "Swiggy", logo: "/logos/swiggy.svg" },
+  { name: "CRED", logo: "/logos/cred.svg" },
+  { name: "Razorpay", logo: "/logos/razorpay.svg" },
+  { name: "Zerodha", logo: "/logos/zerodha.svg" },
+  { name: "PhonePe", logo: "/logos/phonepe.svg" },
+  { name: "Atlassian", logo: "/logos/atlassian.svg" },
 ];
 
 export default function Home() {
@@ -82,13 +96,34 @@ export default function Home() {
             <p className="text-sm text-gray-400 mb-6 uppercase tracking-wider">
               Tal users work at
             </p>
-            <div className="flex items-center justify-center flex-wrap gap-4">
+            <div className="flex items-center justify-center flex-wrap gap-6 md:gap-8">
               {COMPANIES.map((company) => (
                 <div
-                  key={company}
-                  className="brand-chip px-4 py-2 rounded-full text-gray-500 text-sm font-medium"
+                  key={company.name}
+                  className="company-logo-wrapper group relative"
+                  title={company.name}
                 >
-                  {company}
+                  {/* Try to load logo image, fallback to text chip */}
+                  <Image
+                    src={company.logo}
+                    alt={`${company.name} logo`}
+                    width={100}
+                    height={32}
+                    className="company-logo h-6 md:h-8 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                    onError={(e) => {
+                      // Hide image on error, show fallback
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'block';
+                    }}
+                  />
+                  {/* Fallback text chip (hidden by default, shown if image fails) */}
+                  <div
+                    className="brand-chip px-4 py-2 rounded-full text-gray-500 text-sm font-medium hidden"
+                  >
+                    {company.name}
+                  </div>
                 </div>
               ))}
             </div>
